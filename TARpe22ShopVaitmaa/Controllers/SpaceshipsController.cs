@@ -158,7 +158,7 @@ namespace TARpe22ShopVaitmaa.Controllers
                 MaidenLaunch = vm.MaidenLaunch,
                 Manufacturer = vm.Manufacturer,
                 CreatedAt = vm.CreatedAt,
-                ModifiedAt = vm.ModifiedAt,
+                ModifiedAt = DateTime.Now,
                 Files = vm.Files,
                 Image = vm.Image.Select(x => new FileToDatabaseDto
                 {
@@ -219,6 +219,8 @@ namespace TARpe22ShopVaitmaa.Controllers
             vm.Manufacturer = spaceship.Manufacturer;
             vm.CreatedAt = spaceship.CreatedAt;
             vm.ModifiedAt = spaceship.ModifiedAt;
+            vm.Image.AddRange(photos);
+
 
             return View(vm);
         }
@@ -231,7 +233,16 @@ namespace TARpe22ShopVaitmaa.Controllers
             {
                 return NotFound();
             }
-
+            var photos = await _context.FilesToDatabase
+                .Where(x => x.SpaceshipId == id)
+                .Select(y => new ImageViewModel
+                {
+                    SpaceshipId = y.Id,
+                    ImageId = y.Id,
+                    ImageData = y.ImageData,
+                    ImageTitle = y.ImageTitle,
+                    Image = string.Format("data:image/gif;base64,{0}", Convert.ToBase64String(y.ImageData))
+                }).ToArrayAsync();
             var vm = new SpaceshipDeleteViewModel()
             {
 
@@ -257,7 +268,9 @@ namespace TARpe22ShopVaitmaa.Controllers
                 Manufacturer = spaceship.Manufacturer,
                 CreatedAt = spaceship.CreatedAt,
                 ModifiedAt = spaceship.ModifiedAt,
-            };
+                
+        };
+            vm.Image.AddRange(photos);
 
             return View(vm);
         }

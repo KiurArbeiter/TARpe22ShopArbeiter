@@ -50,12 +50,13 @@ namespace TARpe22ShopVaitmaa.ApplicationServices.Services
             spaceship.CreatedAt = dto.CreatedAt;
             spaceship.ModifiedAt = dto.ModifiedAt;
 
+            
+
+            await _context.Spaceships.AddAsync(spaceship);
             if (dto.Files != null)
             {
                 _files.UploadFilesToDatabase(dto, spaceship);
             }
-
-            await _context.Spaceships.AddAsync(spaceship);
             await _context.SaveChangesAsync();
 
             return spaceship; 

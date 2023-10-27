@@ -1,5 +1,5 @@
 ﻿@model TARpe22ShopVaitmaa.Models.Spaceship.SpaceshipCreateUpdateViewModel
-@if (Model.Id != null)
+@if (Model.Id != Guid.Empty)
 {
     <h1>Update</h1>
 }
@@ -142,7 +142,7 @@ else
             <partial name="_images" model="images"/>
         }
         <hr />
-        @if (Model.Id != null)
+        @if (Model.Id != Guid.Empty)
         {
             <input asp-action="update" asp-controller="spaceships" type="submit" class="btn btn-primary" value="Update" />
         }
